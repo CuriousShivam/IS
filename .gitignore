@@ -26,7 +26,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
+.env
 # vercel
 .vercel
 
@@ -38,3 +38,4 @@ pnpm-lock.yaml
 yarn.lock
 package-lock.json
 bun.lockb
+/generated/prisma

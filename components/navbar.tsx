@@ -86,7 +86,7 @@ export const Navbar = () => {
         <Link isExternal aria-label="Github" href={siteConfig.links.twitter}>
           <GithubIcon className="text-default-500" />
         </Link>
-        <ThemeSwitch />
+        {/*<ThemeSwitch />*/}
         <NavbarMenuToggle />
       </NavbarContent>
 
