@@ -1,28 +1,24 @@
-
-
 'use client'
 import {Card, CardBody} from "@heroui/react";
-
 import {Form, Input, Button} from "@heroui/react";
-import React from "react";
+import React, {useActionState} from "react";
+
+import {authenticate} from "@/lib/action";
+import {useFormStatus} from "react-dom";
 
 
 
 export default function App() {
-    const [action, setAction] = React.useState(null);
+const {pending} = useFormStatus();
+    const [errorMessage, dispatch] = useActionState(authenticate, undefined)
+    console.log(errorMessage)
     return (
         <Card>
             <CardBody>
                 <Form
                     className="w-full max-w-xs flex flex-col gap-4"
-                    onReset={() => setAction("reset")}
-                    onSubmit={(e) => {
-                        e.preventDefault();
 
-                        let data = Object.fromEntries(new FormData(e.currentTarget));
-                        console.log(data)
-                        setAction(`submit ${JSON.stringify(data)}`);
-                    }}
+                    action={dispatch}
                 >
                     <Input
                         isRequired
@@ -41,6 +37,7 @@ export default function App() {
                         name="password"
                         placeholder="Enter your password"
                         type="password"
+                        aria-disabled={pending}
                     />
 
 
@@ -52,6 +49,10 @@ export default function App() {
                             Reset
                         </Button>
                     </div>
+                    {errorMessage && (<>
+                        <p>Error Occured: <span className={'text-red-500'}>{errorMessage}</span> </p>
+
+                    </>)}
                 </Form>
             </CardBody>
         </Card>
