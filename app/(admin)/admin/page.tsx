@@ -1,16 +1,20 @@
-// import AcmeLogo from '@/app/ui/acme-logo';
-import LoginForm from '@/components/ui/login-form';
-import { Suspense } from 'react';
- 
-export default function LoginPage() {
-  return (
-    <main className="flex items-center justify-center md:h-screen">
-      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
+import {signOut} from "@/auth";
+import {Button} from "@heroui/button";
+import RTE from '@/components/rte'
+import Link from "next/link";
 
-        <Suspense>
-          <LoginForm />
-        </Suspense>
-      </div>
-    </main>
-  );
+export default () => {
+    return (<>
+        <div className={`text-center `}>
+            <p className={`bg-green-300 m-1 p-1 rounded-lg underline`}><Link href='/admin/new-blog' className={`text-xl text-green-700`}>Create New Blog</Link></p>
+        <p className={`bg-green-300 m-1 p-1 rounded-lg underline`}><Link href='/admin/edit-blog' className={`text-xl text-green-700`}>Edit Old Blog</Link></p>
+        </div>
+        <form className={`absolute bottom-[20px] right-[20px]`} action={async () => {
+            'use server';
+
+            await signOut();
+        }}><Button type={'submit'}>SignOut</Button></form>
+
+
+    </>)
 }

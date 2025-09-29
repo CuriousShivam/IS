@@ -11,7 +11,7 @@ import {useFormStatus} from "react-dom";
 export default function App() {
 const {pending} = useFormStatus();
     const [errorMessage, dispatch] = useActionState(authenticate, undefined)
-    console.log(errorMessage)
+    // console.log(errorMessage)
     return (
         <Card>
             <CardBody>
