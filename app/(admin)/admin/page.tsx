@@ -1,7 +1,8 @@
-import {signOut} from "@/auth";
-import {Button} from "@heroui/button";
+ import {Button} from "@heroui/button";
 import RTE from '@/components/rte'
 import Link from "next/link";
+ import {cookies} from "next/headers";
+ import {redirect} from "next/navigation";
 
 export default () => {
     return (<>
@@ -11,8 +12,13 @@ export default () => {
         </div>
         <form className={`absolute bottom-[20px] right-[20px]`} action={async () => {
             'use server';
+            const cookieStore = await cookies();
+            const sessionId = cookieStore.get("JSESSIONID")?.value;
+            //Delete the cookie locally
+            cookieStore.delete("JSESSIONID");
 
-            await signOut();
+            // 3. Redirect to login page
+            redirect("/login");
         }}><Button type={'submit'}>SignOut</Button></form>
 
 

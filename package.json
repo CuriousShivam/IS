@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint --fix"
   },
-  "dependencies": {
+"dependencies": {
     "@floating-ui/react": "^0.27.16",
     "@heroicons/react": "^2.2.0",
     "@heroui/accordion": "2.2.23",

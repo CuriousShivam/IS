@@ -31,7 +31,7 @@ export default function ResponsiveCarousel({ images }: CarouselProps) {
     return (
         <div className="w-full mx-auto h-full">
             {/* Mobile */}
-            <div className="block md:hidden h-[70vh] ">
+            <div className="block -mt-10 md:hidden h-[75vh] ">
                 <Swiper
                     modules={[Pagination, Navigation]}
                     pagination={{ clickable: true }}

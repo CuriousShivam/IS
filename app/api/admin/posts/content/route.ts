@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import  getServerSession  from "next-auth"
-import { auth } from "@/auth"   // adjust to your path
-import prisma from "@/lib/prisma"
-import { getToken } from "next-auth/jwt"
 
-const secret = process.env.AUTH_SECRET
-// GET /api/blog - Fetch all blog posts or specific post by slug
+
+// GET /api/blogs - Fetch all blogs posts or specific post by slug
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
@@ -24,9 +20,7 @@ export async function GET(req: NextRequest) {
         // }
         if (slug) {
             // Fetch single post by slug
-            const post = await prisma.blogPost.findUnique({
-                where: { slug },
-            });
+            const post = await (process.env.NEXT_BACKEND_BASE_URL + `/admin/posts/${slug}` );
 
             if (!post) {
                 return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -44,13 +38,13 @@ export async function GET(req: NextRequest) {
     } catch (error) {
         console.error('Database error:', error);
         return NextResponse.json(
-            { error: 'Failed to fetch blog posts' },
+            { error: 'Failed to fetch blogs posts' },
             { status: 500 }
         );
     }
 }
 
-// POST /api/blog - Create new blog post
+// POST /api/blogs - Create new blogs post
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
@@ -93,13 +87,13 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Database error:', error);
         return NextResponse.json(
-            { error: 'Failed to create blog post' },
+            { error: 'Failed to create blogs post' },
             { status: 500 }
         );
     }
 }
 
-// PUT /api/blog - Update existing blog post
+// PUT /api/blogs - Update existing blogs post
 export async function PUT(request: NextRequest) {
     try {
         const data = await request.json();
@@ -130,13 +124,13 @@ export async function PUT(request: NextRequest) {
     } catch (error) {
         console.error('Database error:', error);
         return NextResponse.json(
-            { error: 'Failed to update blog post' },
+            { error: 'Failed to update blogs post' },
             { status: 500 }
         );
     }
 }
 
-// DELETE /api/blog - Delete blog post
+// DELETE /api/blogs - Delete blogs post
 export async function DELETE(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
@@ -157,7 +151,7 @@ export async function DELETE(request: NextRequest) {
     } catch (error) {
         console.error('Database error:', error);
         return NextResponse.json(
-            { error: 'Failed to delete blog post' },
+            { error: 'Failed to delete blogs post' },
             { status: 500 }
         );
     }

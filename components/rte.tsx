@@ -39,6 +39,12 @@ import {
     Minimize2
 } from 'lucide-react';
 import { VideoEmbed } from '@/lib/TipTapExtension/VideoEmbed'
+import {getCategoriesAction} from "@/app/(admin)/admin/actions";
+import {Select, SelectItem} from "@heroui/react";
+import {errors} from "jose";
+import {register} from "node:module";
+import CategorySelect from "@/app/(admin)/admin/category";
+import {useForm} from "react-hook-form";
 
 const lowlight = createLowlight(common);
 
@@ -47,13 +53,16 @@ interface BlogPost {
     title: string;
     slug: string;
     content: string;
+    excerpt: string;
     metaTitle: string;
     metaDescription: string;
     metaKeywords: string;
-    featuredImage: string;
+    isFeatured:false;
+    // featuredImage: string;
     status: 'draft' | 'published';
-    createdAt?: Date;
-    updatedAt?: Date;
+    category:string;
+    // createdAt?: Date;
+    // updatedAt?: Date;
 }
 
 interface TiptapBlogEditorProps {
@@ -76,14 +85,16 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
             title: '',
             slug: '',
             content: '',
+            excerpt:'',
             metaTitle: '',
             metaDescription: '',
             metaKeywords: '',
-            featuredImage: '',
+            category:'',
+            // featuredImage: '',
             status: 'draft',
+            isFeatured:false,
         }
     );
-
 
     const [isPreview, setIsPreview] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -91,7 +102,7 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeView, setActiveView] = useState<'visual' | 'html'>('visual');
     const [htmlContent, setHtmlContent] = useState(initialPost?.content || "");
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    // const fileInputRef = useRef<HTMLInputElement>(null);
     const editor = useEditor({
         immediatelyRender:false,
         extensions: [
@@ -122,7 +133,7 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                 },
             }),
             Placeholder.configure({
-                placeholder: 'Start writing your blog post...',
+                placeholder: 'Start writing your blogs post...',
                 emptyEditorClass: 'cursor-text before:content-[attr(data-placeholder)] before:absolute  before:text-gray-400 before:pointer-events-none',
             }),
         ],
@@ -166,42 +177,42 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
     }, [activeView, editor, htmlContent]);
 
     // Upload an Image File
-    const handleImageUpload = async (file: File) => {
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('fileName', file.name);
-            // console.log('uplload')
-            const response = await fetch('/api/upload-image', {
-                method: 'POST',
-                body: formData,
-            });
+    // const handleImageUpload = async (file: File) => {
+    //     try {
+    //         const formData = new FormData();
+    //         formData.append('file', file);
+    //         formData.append('fileName', file.name);
+    //         // console.log('uplload')
+    //         const response = await fetch('/api/upload-image', {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
+    //
+    //         if (response.ok) {
+    //             const { url } = await response.json();
+    //             editor?.chain().focus().setImage({ src: url }).run();
+    //         }
+    //     } catch (error) {
+    //         console.error('Image upload failed:', error);
+    //         alert('Image upload failed. Please try again.');
+    //     }
+    // };
 
-            if (response.ok) {
-                const { url } = await response.json();
-                editor?.chain().focus().setImage({ src: url }).run();
-            }
-        } catch (error) {
-            console.error('Image upload failed:', error);
-            alert('Image upload failed. Please try again.');
-        }
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            handleImageUpload(file);
-        }
-    };
+    // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0];
+    //     if (file) {
+    //         handleImageUpload(file);
+    //     }
+    // };
 
     //Add image using url
-    const addImage = useCallback(() => {
-        const url = window.prompt('Enter image URL');
-        const alt = window.prompt("Enter image alt text");
-        if (url && editor) {
-            editor.chain().focus().setImage({ src: url, alt }).run();
-        }
-    }, [editor]);
+    // const addImage = useCallback(() => {
+    //     const url = window.prompt('Enter image URL');
+    //     const alt = window.prompt("Enter image alt text");
+    //     if (url && editor) {
+    //         editor.chain().focus().setImage({ src: url, alt }).run();
+    //     }
+    // }, [editor]);
 
     // Add a link
     const addLink = useCallback(() => {
@@ -221,26 +232,26 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
     }, [editor]);
 
     // Add a Video
-    const addVideo = useCallback(() => {
-        const url = window.prompt('Enter video URL (YouTube, Vimeo, etc.)');
-        if (url && editor) {
-            let embedUrl = ''
-
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                const videoId = url.includes('youtu.be')
-                    ? url.split('/').pop()?.split('?')[0]
-                    : url.split('v=')[1]?.split('&')[0]
-                embedUrl = `https://www.youtube.com/embed/${videoId}`
-            } else if (url.includes('vimeo.com')) {
-                const videoId = url.split('/').pop()
-                embedUrl = `https://player.vimeo.com/video/${videoId}`
-            } else {
-                embedUrl = url
-            }
-
-            editor.chain().focus().setVideo({ src: embedUrl }).run()
-        }
-    }, [editor]);
+    // const addVideo = useCallback(() => {
+    //     const url = window.prompt('Enter video URL (YouTube, Vimeo, etc.)');
+    //     if (url && editor) {
+    //         let embedUrl = ''
+    //
+    //         if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    //             const videoId = url.includes('youtu.be')
+    //                 ? url.split('/').pop()?.split('?')[0]
+    //                 : url.split('v=')[1]?.split('&')[0]
+    //             embedUrl = `https://www.youtube.com/embed/${videoId}`
+    //         } else if (url.includes('vimeo.com')) {
+    //             const videoId = url.split('/').pop()
+    //             embedUrl = `https://player.vimeo.com/video/${videoId}`
+    //         } else {
+    //             embedUrl = url
+    //         }
+    //
+    //         editor.chain().focus().setVideo({ src: embedUrl }).run()
+    //     }
+    // }, [editor]);
 
     const handleSave = async () => {
         setIsSaving(true);
@@ -251,13 +262,13 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
              await onSave({
                 ...post,
                 content: activeView === 'html' ? htmlContent : editor?.getHTML() || '',
-                updatedAt: new Date(),
-                createdAt: post.createdAt || new Date(),
+                // updatedAt: new Date(),
+                // createdAt: post.createdAt || new Date(),
             });
             // console.log('rte res ', res)
         } catch (error) {
             console.error('Save failed:', error);
-            alert('Failed to save blog post. Please try again.');
+            alert('Failed to save blogs post. Please try again.');
         } finally {
             setIsSaving(false);
         }
@@ -269,6 +280,11 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
 
     const toggleFullscreen = () => {
         setIsFullscreen(!isFullscreen);
+    };
+
+    const handleCategoryChange = (id: string) => {
+        // Updates the state with the selected ID from child
+        setPost((prev: any) => ({ ...prev, category: id }));
     };
 
     if (!editor) {
@@ -336,19 +352,23 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                     />
                 </div>
 
+                <CategorySelect
+                    selectedId={post.category}
+                    onCategoryChange={handleCategoryChange}
+                />
                 {/* Featured Image */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Featured Image URL
-                    </label>
-                    <input
-                        type="url"
-                        placeholder="https://example.com/image.jpg"
-                        value={post.featuredImage}
-                        onChange={(e) => setPost(prev => ({ ...prev, featuredImage: e.target.value }))}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                </div>
+                {/*<div className="mb-4">*/}
+                {/*    <label className="block text-sm font-medium text-gray-700 mb-2">*/}
+                {/*        Featured Image URL*/}
+                {/*    </label>*/}
+                {/*    <input*/}
+                {/*        type="url"*/}
+                {/*        placeholder="https://example.com/image.jpg"*/}
+                {/*        value={post.featuredImage}*/}
+                {/*        onChange={(e) => setPost(prev => ({ ...prev, featuredImage: e.target.value }))}*/}
+                {/*        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"*/}
+                {/*    />*/}
+                {/*</div>*/}
 
                 {/* Meta Fields Toggle */}
                 <button
@@ -620,27 +640,27 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                                 >
                                     <Unlink size={16} />
                                 </button>
-                                <button
-                                    onClick={addImage}
-                                    className="p-2 hover:bg-gray-200 rounded"
-                                    title="Add Image"
-                                >
-                                    <ImageIcon size={16} />
-                                </button>
-                                <button
-                                    onClick={() => fileInputRef.current?.click()}
-                                    className="p-2 hover:bg-gray-200 rounded"
-                                    title="Upload Image"
-                                >
-                                    <Upload size={16} />
-                                </button>
-                                <button
-                                    onClick={addVideo}
-                                    className="p-2 hover:bg-gray-200 rounded"
-                                    title="Add Video"
-                                >
-                                    <Video size={16} />
-                                </button>
+                                {/*<button*/}
+                                {/*    onClick={addImage}*/}
+                                {/*    className="p-2 hover:bg-gray-200 rounded"*/}
+                                {/*    title="Add Image"*/}
+                                {/*>*/}
+                                {/*    <ImageIcon size={16} />*/}
+                                {/*</button>*/}
+                                {/*<button*/}
+                                {/*    onClick={() => fileInputRef.current?.click()}*/}
+                                {/*    className="p-2 hover:bg-gray-200 rounded"*/}
+                                {/*    title="Upload Image"*/}
+                                {/*>*/}
+                                {/*    <Upload size={16} />*/}
+                                {/*</button>*/}
+                                {/*<button*/}
+                                {/*    onClick={addVideo}*/}
+                                {/*    className="p-2 hover:bg-gray-200 rounded"*/}
+                                {/*    title="Add Video"*/}
+                                {/*>*/}
+                                {/*    <Video size={16} />*/}
+                                {/*</button>*/}
                             </div>
                         </>
                     )}
@@ -704,13 +724,13 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
             </div>
 
             {/* Hidden file input for image uploads */}
-            <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-            />
+            {/*<input*/}
+            {/*    ref={fileInputRef}*/}
+            {/*    type="file"*/}
+            {/*    accept="image/*"*/}
+            {/*    onChange={handleFileChange}*/}
+            {/*    className="hidden"*/}
+            {/*/>*/}
 
             {/* Character counts and tips */}
             <div className="text-sm text-gray-500 space-y-1">

@@ -2,30 +2,22 @@
 
 import {headers} from "next/headers";
 import Link from "next/link";
-// import {
-//     Table,
-//     TableHeader,
-//     TableColumn,
-//     TableBody,
-//     TableRow,
-//     TableCell,
-//     getKeyValue,
-// } from "@heroui/react";
+import {
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    getKeyValue,
+} from "@heroui/react";
+import {getBlogsAction} from "@/app/(admin)/admin/actions";
 
 export default async function EditBlog() {
     // Fetch directly on the server
-    const host = (await headers()).get("host") // e.g. "localhost:3000" or "yourdomain.com"
-    const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
-     const res = await fetch(`${protocol}://${host}/api/admin/posts/content?status=all`, {
-        method: 'GET',
-        cache: "no-store",
-    })
+      const res = await getBlogsAction();
 
-    if (!res.ok) {
-        return <p>Failed to fetch blogs</p>
-    }
-
-    const blogs = await res.json()
+    const blogs = await res.data;
     return (
         <>
             <h1>Edit Blog</h1>
@@ -62,7 +54,7 @@ export default async function EditBlog() {
                                 {blog.title}
                             </th>
                             <td className="px-6 py-4"  >
-                                <Link href={`/admin/edit-blog/${blog.slug}`}>
+                                <Link href={`/admin/edit-blog/${blog.id}`}>
                                     <button className="px-4 py-2 bg-green-500 text-white rounded">
                                         {blog.id}
                                     </button>

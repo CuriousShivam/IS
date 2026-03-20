@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-    name: "XYZ",
+    name: "Insurance Advisor",
     description: "Make beautiful websites regardless of your design experience.",
     navItems: [
         {
@@ -9,29 +9,23 @@ export const siteConfig = {
             href: "/",
         },
         {
-            label: "Products",
-            href: "/products",
+            label: "Blogs",
+            href: "/blogs ",
         },
         {
-            label: "Consultancy",
-            href: "/consultancy",
-        },
-        // {
-        //   label: "Docs",
-        //   href: "/docs",
-        // },
-        // {
-        //   label: "Pricing",
-        //   href: "/pricing",
-        // },
-        {
-            label: "Blog",
-            href: "/blog",
+            label: "Reviews",
+            href: "/reviews",
         },
         {
-            label: "About",
+            label: "About Us",
             href: "/about",
         },
+        {
+            label: "Contact Us",
+            href: "/contactus",
+        },
+
+
     ],
     navMenuItems: [
         {
@@ -39,60 +33,24 @@ export const siteConfig = {
             href: "/",
         },
         {
-            label: "Products",
-            href: "/products",
+            label: "Blogs",
+            href: "/blogs",
         },
         {
-            label: "Consultancy",
-            href: "/consultancy",
+            label: "Reviews",
+            href: "/reviews",
         },
         {
-            label: "Blog",
-            href: "/blog",
-        },
-        {
-            label: "About",
+            label: "About Us",
             href: "/about",
         },
-        // {
-        //     label: "Profile",
-        //     href: "/profile",
-        // },
-        // {
-        //     label: "Dashboard",
-        //     href: "/dashboard",
-        // },
-        // {
-        //     label: "Projects",
-        //     href: "/projects",
-        // },
-        // {
-        //     label: "Team",
-        //     href: "/team",
-        // },
-        // {
-        //     label: "Calendar",
-        //     href: "/calendar",
-        // },
-        // {
-        //     label: "Settings",
-        //     href: "/settings",
-        // },
-        // {
-        //     label: "Help & Feedback",
-        //     href: "/help-feedback",
-        // },
-        // {
-        //     label: "Logout",
-        //     href: "/logout",
-        // },
+        {
+            label: "Contact Us",
+            href: "/contactus",
+        },
     ],
     links: {
-        // github: "https://github.com/heroui-inc/heroui",
         twitter: "https://twitter.com/hero_ui",
-        // docs: "https://heroui.com",
-        discord: "https://discord.gg/9b6yyZKmH4",
-        // sponsor: "https://patreon.com/jrgarciadev",
         linkedIn: "https://linkedin.com/in/hero_ui",
     },
 };

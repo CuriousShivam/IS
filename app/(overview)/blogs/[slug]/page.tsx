@@ -1,7 +1,8 @@
-// app/blog/[slug]/page.tsx - Next.js App Router
+// app/blogs/[id]/page.tsx - Next.js App Router
 import {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import SafeImage from "@/components/safeImage";
+import {getBlogBySlugAction} from "@/app/(overview)/blogs/action";
 
 interface BlogPost {
     id: string;
@@ -19,67 +20,69 @@ interface BlogPost {
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
     try {
-        const res = await fetch(`${process.env.BASE_URL}/api/admin/posts/content?slug=${slug}`, {
-            method: 'GET', next: {revalidate: 3600}, // Revalidate every hour
-        });
+        const res = await getBlogBySlugAction(slug);
 
-        if (!res.ok) {
+        // Check the 'success' flag and return the 'data' property
+        if (!res || !res.success || !res.data) {
             return null;
         }
 
-        return res.json();
+        return res.data; // This is the actual BlogPost object
     } catch (error) {
         console.error('Failed to fetch blog post:', error);
         return null;
     }
 }
-
 // Generate metadata for SEO
 export async function generateMetadata(
-    {params}: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
-    const p = await params;
-    const post = await getBlogPost(p.slug);
+    const { slug } = await params;
+    const post = await getBlogPost(slug);
+
     if (!post) {
         return {
-            title: 'Post Not Found',
+            title: 'Post Not Found | Insurance Advisor',
             description: 'The requested blog post could not be found.',
         };
     }
 
+    const fullUrl = `${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/blogs/${post.slug}`;
+
     return {
-        title: post.metaTitle || post.title,
-        description: post.metaDescription,
+        // Fallback to post.title if metaTitle is empty
+        title: post.metaTitle || `${post.title} | Insurance Advisor`,
+        description: post.metaDescription || post.content.substring(0, 160).replace(/<[^>]*>/g, ''),
         keywords: post.metaKeywords,
-        authors: [{name: 'Your Blog Name'}],
+
+        // OpenGraph (Facebook, LinkedIn, WhatsApp)
         openGraph: {
             title: post.metaTitle || post.title,
             description: post.metaDescription,
+            url: fullUrl,
+            siteName: 'Insurance Advisor',
             type: 'article',
             publishedTime: post.createdAt,
             modifiedTime: post.updatedAt,
-            images: post.featuredImage ? [
-                {
-                    url: post.featuredImage,
-                    width: 1200,
-                    height: 630,
-                    alt: post.title,
-                }
-            ] : [],
-            siteName: 'Your Blog Name',
+            // images: [
+            //     {
+            //         url: post.featuredImage || '/default-share-image.jpg',
+            //         width: 1200,
+            //         height: 630,
+            //         alt: post.title,
+            //     },
+            // ],
         },
-        twitter: {
-            card: 'summary_large_image',
-            title: post.metaTitle || post.title,
-            description: post.metaDescription,
-            images: post.featuredImage ? [post.featuredImage] : [],
-        },
+
+        // Twitter Card
+
+
+        // Canonical URL to prevent duplicate content issues
         alternates: {
-            canonical: `${process.env.BASE_URL}/blog/${post.slug}`,
+            canonical: fullUrl,
         },
     };
 }
-
 
 export default async function BlogPostPage({
                                                params
@@ -92,8 +95,6 @@ export default async function BlogPostPage({
     if (!post) {
         notFound();
     }
-
-
 
     // Format date for display
     const publishDate = new Date(post.createdAt).toLocaleDateString('en-US', {
