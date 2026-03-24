@@ -1,9 +1,29 @@
-import { title } from "@/components/primitives";
+import { getApprovedReviews, submitReviewAction } from "@/app/(overview)/action";
+import ReviewForm from "@/components/reviewForm";
+import ReviewList from "@/components/reviewList"; // Import the component we just made
 
-export default function PricingPage() {
-  return (
-    <div>
-      <h1 className={title()}>Pricing</h1>
-    </div>
-  );
+export default async function ReviewsPage() {
+    // This fetch happens on the server (very fast on Xubuntu)
+    const reviews = await getApprovedReviews();
+
+    return (
+        <div className="max-w-6xl mx-auto py-20 px-6 -mt-25">
+            <header className="text-center mb-16">
+                <h1 className="text-4xl font-bold mb-4 text-gray-900">Client Testimonials</h1>
+                <p className="text-gray-500">Trusted advice from satisfied policy holders.</p>
+            </header>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                {/* 1. The Showcase (Client Component) */}
+                <ReviewList reviews={reviews} />
+
+                {/* 2. The Form (Already a Client Component) */}
+                <div className="lg:col-span-1">
+                    <div className="sticky top-24">
+                        <ReviewForm submitAction={submitReviewAction} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }

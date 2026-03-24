@@ -3,6 +3,7 @@
 
 import axios from "axios";
 import {cookies} from "next/headers";
+import {revalidatePath} from "next/cache";
 
 // 1. Must be an async function
 export async function createBlogAction(post: any) {
@@ -55,7 +56,10 @@ export async function getCategoriesAction() {
 export async function getBlogsAction() {
     try {
         const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:8080";
+console.log(
 
+
+    'getBlogsAction()');
         // Requirement 6.1.3: Retrieves blog content from PostgreSQL
         const res = await axios.get(`${baseUrl}/api/admin/blogs`, {
             headers: {
@@ -111,8 +115,7 @@ export async function getBlogByIdAction(id: string) {
 }
 export async function updateBlogAction(post ) {
     try {
-        console.log("Post: ", post);
-        console.log("Id: ", post.id);
+
         const baseUrl = process.env.BACKEND_BASE_URL || "http://localhost:8080";
         post.category = post.category.id;
 
@@ -134,5 +137,101 @@ export async function updateBlogAction(post ) {
             success: false,
             message: error.response?.data || "Database connection failed"
         };
+    }
+}
+
+export async function getAdminEnquiries() {
+    try {
+        const cookieStore = await cookies();
+        const allCookies = cookieStore.toString(); // Gets JSESSIONID or JWT
+
+        const res = await axios.get(`${process.env.NODE_ENV_BACKEND_BASE_URL}/api/admin/enquiries/all`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': allCookies, // Manually forward the browser's cookies
+                'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL,
+            },
+            withCredentials: true,
+        });
+
+        // Axios stores the JSON in .data
+        return res.data;
+
+    } catch (error: any) {
+        console.error("Admin Fetch Error:", error.response?.status, error.message);
+
+        // If it's a 403, your Spring Boot session might have expired
+        if (error.response?.status === 403) {
+            console.log("Access Denied: Check Spring Security path matching.");
+        }
+
+        return [];
+    }
+}
+export async function deleteEnquiryAction(id: string) {
+    try {
+        const cookieStore = await cookies();
+        const allCookies = cookieStore.toString();
+
+        const res = await axios.delete(`${process.env.NODE_ENV_BACKEND_BASE_URL}/api/admin/enquiries/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL,
+                'Cookie': allCookies,
+            },
+            withCredentials: true
+        });
+
+
+        // Revalidate the path so the UI updates
+        revalidatePath('/admin/enquiries');
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Delete Error:", error.response?.status);
+        return { success: false, error: error.response?.status };
+    }
+}
+
+export async function getAdminReviews() {
+    try {
+        const cookieStore = await cookies();
+        const allCookies = cookieStore.toString();
+
+        const res = await axios.get(`${process.env.NODE_ENV_BACKEND_BASE_URL}/api/admin/reviews/all`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL,
+                'Cookie': allCookies,
+            },
+            withCredentials: true
+        });
+        return res.data;
+    } catch (error: any) {
+        console.error("Admin Fetch Reviews Error:", error.response?.status);
+        return [];
+    }
+}
+
+export async function updateReviewStatus(id: string, updates: any) {
+    try {
+        const cookieStore = await cookies();
+        const allCookies = cookieStore.toString();
+
+        const res = await axios.patch(`${process.env.NODE_ENV_BACKEND_BASE_URL}/api/admin/reviews/${id}`, updates, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL,
+                'Cookie': allCookies,
+            },
+            withCredentials: true
+        });
+console.log(res.status);
+        // Clear cache for the public reviews page so changes reflect immediately
+        revalidatePath('/admin/reviews');
+        return { success: true, data: res.data };
+    } catch (error: any) {
+        console.error("Update Review Error:", error.response?.status);
+        return { success: false, msg: "Failed to update review status" };
     }
 }

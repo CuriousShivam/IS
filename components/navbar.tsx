@@ -21,7 +21,8 @@ import {
   Logo,
 } from "@/components/icons";
 import Image from "next/image";
-import ContactUsPage from '@/components/contactus'
+import ContactUsPage from '@/components/enquirymodal'
+import {submitEnquiryAction} from "@/app/(overview)/action";
 
 export const Navbar = () => {
   return (
@@ -52,7 +53,7 @@ export const Navbar = () => {
               {siteConfig.navItems.map((item) => (
                   <NavbarItem key={item.label}>
                       {item.label === "Contact Us" ? (
-                          <ContactUsPage/>
+                          <ContactUsPage submitAction={submitEnquiryAction}/>
                       ) : (
                           <NextLink
                               className={clsx(
@@ -87,7 +88,7 @@ export const Navbar = () => {
           {siteConfig.navMenuItems.map((item, index) => (
               <NavbarItem key={item.label}>
                   {item.label === "Contact Us" ? (
-                      <ContactUsPage/>
+                      <ContactUsPage submitAction={submitEnquiryAction}/>
                   ) : (
                       <NextLink
                           className={clsx(

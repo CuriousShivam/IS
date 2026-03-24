@@ -128,7 +128,7 @@ export default async function BlogListPage() {
             <div className="min-h-screen bg-gray-50">
                 {/* Hero & Stats Bar Sections remain the same */}
 
-                <main className="max-w-6xl mx-auto px-6 -mt-10">
+                <main className="max-w-6xl mx-auto px-6 -mt-7">
                     {posts.length === 0 ? (
                         <div className="text-center p-12">
                             <h2 className="text-2xl font-bold">No Posts Yet</h2>

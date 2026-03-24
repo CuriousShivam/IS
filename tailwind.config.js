@@ -13,6 +13,20 @@ const config = {
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
       },
+      animation: {
+        marquee: 'marquee 25s linear infinite',
+        'marquee-reverse': 'marquee-reverse 20s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-33.33%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+      },
     },
   },
   darkMode: "class",

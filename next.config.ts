@@ -59,7 +59,7 @@
 module.exports = {
     images: {
         remotePatterns: [
-            new URL('https://ik.imagekit.io/0Shivams/**')
+            new URL('https://ik.imagekit.io/0Shivams/**'),
             {
                 protocol: 'https',
                 hostname: 'ik.imagekit.io/0Shivams/',
