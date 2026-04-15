@@ -5,6 +5,9 @@ import EnquiryModal from "@/components/enquirymodal";
 import {submitEnquiryAction} from "@/app/(overview)/action";
 import {Button, Link} from "@heroui/react";
 import PartnerLogos from "@/components/partnerLogo";
+import WhyUs from "@/components/whyus";
+import GoodHands from "@/components/GoodHands";
+import ServicesSection from "@/components/serviceSection";
 
 // sm: process.env.NEXT_PUBLIC_CAROUSAL_SM.split(','); // small screens
 // md:  process.env.NEXT_PUBLIC_CAROUSAL_MD.split(','); // medium screens
@@ -34,26 +37,16 @@ export default function Home() {
                         </div>
                     </section>
 
-                    {/* 2. SERVICES SECTION */}
-                    <section className="py-20 max-w-7xl mx-auto px-6">
-                        <h2 className="text-3xl font-bold text-center mb-12">Our Expertise</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            {['Health', 'Life', 'Vehicle', 'Term'].map((item) => (
-                                <div key={item}
-                                     className="p-6 border rounded-xl hover:shadow-md transition-shadow bg-white">
-                                    <div
-                                        className="w-12 h-12 bg-blue-100 rounded-lg mb-4 flex items-center justify-center text-blue-600 font-bold">
-                                        {item[0]}
-                                    </div>
-                                    <h3 className="font-bold text-xl mb-2">{item} Insurance</h3>
-                                    <p className="text-gray-500 text-sm">Comprehensive coverage plans designed for your
-                                        specific needs.</p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
 
-                    {/* 3. FEATURED BLOGS SECTION */}
+
+                    {/*</section>*/}
+                    <ServicesSection/>
+
+                    <WhyUs/>
+
+                    <PartnerLogos/>
+                    <GoodHands/>
+                    {/*/!* 3. FEATURED BLOGS SECTION *!/*/}
                     {/*<section className="bg-gray-50 py-20 px-6">*/}
                     {/*    <div className="max-w-7xl mx-auto">*/}
                     {/*        <div className="flex justify-between items-center mb-10">*/}
@@ -66,9 +59,9 @@ export default function Home() {
                     {/*    </div>*/}
                     {/*</section>*/}
 
-                    <Carousel />
+                    {/*<Carousel />*/}
 
-                    <PartnerLogos/>
+
                 </main>
 
 

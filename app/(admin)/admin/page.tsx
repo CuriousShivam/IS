@@ -8,10 +8,11 @@ import {
     MessageSquare,
     Star,
     LogOut,
-    LayoutDashboard
-} from "lucide-react"; // Install lucide-react or use HeroIcons
+    LayoutDashboard, Images
+} from "lucide-react";
+import {deleteSession} from "@/app/(admin)/admin/actions";
 
-export default function AdminDashboard({ signOutAction }: { signOutAction: any }) {
+export default function AdminDashboard() {
 
     const adminTools = [
         {
@@ -41,6 +42,13 @@ export default function AdminDashboard({ signOutAction }: { signOutAction: any }
             href: "/admin/reviews",
             icon: <Star className="text-warning-600" />,
             color: "bg-amber-50"
+        },
+        {
+            title: "Media (Images)",
+            desc: "Upload and Use Images for blogs.",
+            href: "/admin/images",
+            icon: <Images className="text-warning-600" />,
+            color: "bg-amber-50"
         }
     ];
 
@@ -56,7 +64,7 @@ export default function AdminDashboard({ signOutAction }: { signOutAction: any }
                     </h1>
                 </div>
 
-                <form action={signOutAction}>
+                <form action={deleteSession}>
                     <Button
                         type="submit"
                         color="danger"

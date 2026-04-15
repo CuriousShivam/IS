@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint --fix"
   },
-"dependencies": {
+  "dependencies": {
     "@floating-ui/react": "^0.27.16",
     "@heroicons/react": "^2.2.0",
     "@heroui/accordion": "2.2.23",
@@ -88,6 +88,7 @@
     "framer-motion": "12.23.14",
     "highlight": "^0.2.4",
     "imagekit": "^6.0.0",
+    "imagekitio-next": "^1.0.1",
     "imagekitio-react": "^4.3.0",
     "intl-messageformat": "10.7.16",
     "lodash.throttle": "^4.1.1",

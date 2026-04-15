@@ -39,12 +39,13 @@ import {
     Minimize2
 } from 'lucide-react';
 import { VideoEmbed } from '@/lib/TipTapExtension/VideoEmbed'
-import {getCategoriesAction} from "@/app/(admin)/admin/actions";
+import {getCategoriesAction, getImagesAction} from "@/app/(admin)/admin/actions";
 import {Select, SelectItem} from "@heroui/react";
 import {errors} from "jose";
 import {register} from "node:module";
 import CategorySelect from "@/app/(admin)/admin/category";
 import {useForm} from "react-hook-form";
+import AdminGallery from "@/components/AdminGallery";
 
 const lowlight = createLowlight(common);
 
@@ -58,7 +59,7 @@ interface BlogPost {
     metaDescription: string;
     metaKeywords: string;
     isFeatured:false;
-    // featuredImage: string;
+    featuredImage: string;
     status: 'draft' | 'published';
     category:string;
     // createdAt?: Date;
@@ -68,11 +69,6 @@ interface BlogPost {
 interface TiptapBlogEditorProps {
     initialPost?: BlogPost;
     onSave: (post: BlogPost) => Promise<void>;
-    // imageKitConfig: {
-    //     urlEndpoint: string;
-    //     publicKey: string;
-    //     authenticationEndpoint: string;
-    // };
 }
 
 const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
@@ -90,7 +86,7 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
             metaDescription: '',
             metaKeywords: '',
             category:'',
-            // featuredImage: '',
+            featuredImage: '',
             status: 'draft',
             isFeatured:false,
         }
@@ -100,9 +96,8 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
     const [isSaving, setIsSaving] = useState(false);
     const [showMetaFields, setShowMetaFields] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [activeView, setActiveView] = useState<'visual' | 'html'>('visual');
+    const [activeView, setActiveView] = useState<'visual' | 'html'>('html');
     const [htmlContent, setHtmlContent] = useState(initialPost?.content || "");
-    // const fileInputRef = useRef<HTMLInputElement>(null);
     const editor = useEditor({
         immediatelyRender:false,
         extensions: [
@@ -150,7 +145,6 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
         },
     });
 
-
     // Auto-generate slug from title
     useEffect(() => {
 
@@ -176,44 +170,6 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
         }
     }, [activeView, editor, htmlContent]);
 
-    // Upload an Image File
-    // const handleImageUpload = async (file: File) => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append('file', file);
-    //         formData.append('fileName', file.name);
-    //         // console.log('uplload')
-    //         const response = await fetch('/api/upload-image', {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    //
-    //         if (response.ok) {
-    //             const { url } = await response.json();
-    //             editor?.chain().focus().setImage({ src: url }).run();
-    //         }
-    //     } catch (error) {
-    //         console.error('Image upload failed:', error);
-    //         alert('Image upload failed. Please try again.');
-    //     }
-    // };
-
-    // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const file = e.target.files?.[0];
-    //     if (file) {
-    //         handleImageUpload(file);
-    //     }
-    // };
-
-    //Add image using url
-    // const addImage = useCallback(() => {
-    //     const url = window.prompt('Enter image URL');
-    //     const alt = window.prompt("Enter image alt text");
-    //     if (url && editor) {
-    //         editor.chain().focus().setImage({ src: url, alt }).run();
-    //     }
-    // }, [editor]);
-
     // Add a link
     const addLink = useCallback(() => {
         const previousUrl = editor?.getAttributes('link').href;
@@ -231,27 +187,6 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
         editor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
     }, [editor]);
 
-    // Add a Video
-    // const addVideo = useCallback(() => {
-    //     const url = window.prompt('Enter video URL (YouTube, Vimeo, etc.)');
-    //     if (url && editor) {
-    //         let embedUrl = ''
-    //
-    //         if (url.includes('youtube.com') || url.includes('youtu.be')) {
-    //             const videoId = url.includes('youtu.be')
-    //                 ? url.split('/').pop()?.split('?')[0]
-    //                 : url.split('v=')[1]?.split('&')[0]
-    //             embedUrl = `https://www.youtube.com/embed/${videoId}`
-    //         } else if (url.includes('vimeo.com')) {
-    //             const videoId = url.split('/').pop()
-    //             embedUrl = `https://player.vimeo.com/video/${videoId}`
-    //         } else {
-    //             embedUrl = url
-    //         }
-    //
-    //         editor.chain().focus().setVideo({ src: embedUrl }).run()
-    //     }
-    // }, [editor]);
 
     const handleSave = async () => {
         setIsSaving(true);
@@ -311,8 +246,9 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
 
                 <article className="prose max-w-none">
                     <h1>{post.title}</h1>
+
                     <div dangerouslySetInnerHTML={{
-                        __html: activeView === 'html' ? htmlContent : editor.getHTML()
+                        __html: htmlContent
                     }} />
                 </article>
 
@@ -356,19 +292,19 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                     selectedId={post.category}
                     onCategoryChange={handleCategoryChange}
                 />
-                {/* Featured Image */}
-                {/*<div className="mb-4">*/}
-                {/*    <label className="block text-sm font-medium text-gray-700 mb-2">*/}
-                {/*        Featured Image URL*/}
-                {/*    </label>*/}
-                {/*    <input*/}
-                {/*        type="url"*/}
-                {/*        placeholder="https://example.com/image.jpg"*/}
-                {/*        value={post.featuredImage}*/}
-                {/*        onChange={(e) => setPost(prev => ({ ...prev, featuredImage: e.target.value }))}*/}
-                {/*        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"*/}
-                {/*    />*/}
-                {/*</div>*/}
+                 {/*Featured Image*/}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Featured Image URL
+                    </label>
+                    <input
+                        type="url"
+                        placeholder="https://example.com/image.jpg"
+                        value={post?.featuredImage || ''}
+                        onChange={(e) => setPost(prev => ({ ...prev, featuredImage: e.target.value }))}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
 
                 {/* Meta Fields Toggle */}
                 <button
@@ -723,14 +659,6 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                 </div>
             </div>
 
-            {/* Hidden file input for image uploads */}
-            {/*<input*/}
-            {/*    ref={fileInputRef}*/}
-            {/*    type="file"*/}
-            {/*    accept="image/*"*/}
-            {/*    onChange={handleFileChange}*/}
-            {/*    className="hidden"*/}
-            {/*/>*/}
 
             {/* Character counts and tips */}
             <div className="text-sm text-gray-500 space-y-1">
@@ -743,8 +671,11 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                     <li>Add alt text to images for better accessibility and SEO</li>
                 </ul>
             </div>
+
+            <AdminGallery getImagesAction={getImagesAction}/>
         </div>
     );
 };
+
 
 export default TiptapBlogEditor;

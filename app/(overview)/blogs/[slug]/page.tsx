@@ -26,6 +26,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
         if (!res || !res.success || !res.data) {
             return null;
         }
+        console.log("Created At",res.data.createdAt)
 
         return res.data; // This is the actual BlogPost object
     } catch (error) {
@@ -64,14 +65,13 @@ export async function generateMetadata(
             type: 'article',
             publishedTime: post.createdAt,
             modifiedTime: post.updatedAt,
-            // images: [
-            //     {
-            //         url: post.featuredImage || '/default-share-image.jpg',
-            //         width: 1200,
-            //         height: 630,
-            //         alt: post.title,
-            //     },
-            // ],
+            images: [
+                {
+                    url: post.featuredImage || '/default-share-image.jpg',
+
+                    alt: post.title,
+                },
+            ],
         },
 
         // Twitter Card
@@ -156,14 +156,26 @@ export default async function BlogPostPage({
                         <time dateTime={post.createdAt} className="font-medium">
                             Published on {publishDate}
                         </time>
-                        {post.updatedAt !== post.createdAt && (
-                            <>
-                                <span className="hidden sm:inline">•</span>
-                                <time dateTime={post.updatedAt}>
-                                    Updated on {updateDate}
-                                </time>
-                            </>
-                        )}
+                        {(() => {
+                            // Helper to normalize dates to the nearest minute
+                            const normalize = (dateStr:any) => {
+                                const d = new Date(dateStr);
+                                d.setSeconds(0, 0);
+                                return d.getTime();
+                            };
+
+                            // Only show "Updated on" if the minute-level timestamps differ
+                            const isModified = normalize(post.updatedAt) !== normalize(post.createdAt);
+
+                            return isModified && (
+                                <>
+                                    <span className="hidden sm:inline">•</span>
+                                    <time dateTime={post.updatedAt}>
+                                        Updated on {updateDate}
+                                    </time>
+                                </>
+                            );
+                        })()}
                     </div>
                 </header>
 
@@ -186,8 +198,6 @@ export default async function BlogPostPage({
                     className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:shadow-md"
                     dangerouslySetInnerHTML={{__html: post.content}}
                 />
-
-
             </article>
         </>
     );

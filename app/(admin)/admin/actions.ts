@@ -113,7 +113,7 @@ export async function getBlogByIdAction(id: string) {
         };
     }
 }
-export async function updateBlogAction(post ) {
+export async function updateBlogAction(post:any ) {
     try {
 
         const baseUrl = process.env.BACKEND_BASE_URL || "http://localhost:8080";
@@ -234,4 +234,51 @@ console.log(res.status);
         console.error("Update Review Error:", error.response?.status);
         return { success: false, msg: "Failed to update review status" };
     }
+}
+
+
+export async function uploadImageAction(formData: FormData) {
+    try {
+        // We forward the formData directly to the Spring Boot backend
+        const response = await fetch(`${process.env.NODE_ENV_BACKEND_BASE_URL}/api/admin/images/upload`, {
+            method: "POST",
+            body: formData, // FormData automatically sets the correct Multipart headers
+            // Note: Do NOT manually set Content-Type header when sending FormData
+            credentials: 'include',
+            headers: {
+
+
+            }
+        });
+
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || "Backend upload failed");
+        }
+
+        const data = await response.json();
+        return { success: true, data }; // This returns the saved 'images' table record
+    } catch (error) {
+        console.error("Upload Error:", error);
+        return { success: false, error: "Upload failed" };
+    }
+}
+
+export async function getImagesAction() {
+    try {
+        const response = await fetch(`${process.env.NODE_ENV_BACKEND_BASE_URL}/api/admin/images`,{
+            credentials: 'include',
+        });
+        const data = await response.json();
+        console.log("Data",data)
+        return { success: true, data: data };
+    } catch (error:any) {
+        console.error("Failed to fetch assets:", error);
+        return { success: false, error: error.response?.status };
+    }
+}
+export async function deleteSession() {
+    const cookieStore = await cookies();
+    cookieStore.delete('JSESSIONID');
 }

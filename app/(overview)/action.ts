@@ -31,7 +31,7 @@ export async function getApprovedReviews() {
     try {
 
         const res = await fetch(`${baseUrl}/api/reviews`, {
-            next: { revalidate: 3600 } // Cache for 1 hour to save CPU/RAM
+            next: { revalidate: 900 } // Cache for 1 hour to save CPU/RAM
         });
 
         if (!res.ok) return [];
