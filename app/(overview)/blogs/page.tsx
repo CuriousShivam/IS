@@ -1,7 +1,7 @@
 // app/blogs/page.tsx - Blog List Page
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, Search } from 'lucide-react';
-import SafeImage from "@/components/safeImage";
+import SafeImage from "@/components/admin/media/safeImage";
 
 interface BlogPost {
     id: string;
@@ -128,7 +128,7 @@ export default async function BlogListPage() {
             <div className="min-h-screen bg-gray-50">
                 {/* Hero & Stats Bar Sections remain the same */}
 
-                <main className="max-w-6xl mx-auto px-6 -mt-7">
+                <main className="max-w-6xl mx-auto  py-20 px-6">
                     {posts.length === 0 ? (
                         <div className="text-center p-12">
                             <h2 className="text-2xl font-bold">No Posts Yet</h2>
@@ -164,7 +164,7 @@ export default async function BlogListPage() {
                                 {posts.slice(1).map((post) => (
                                     <article key={post.id} className="bg-white rounded-lg shadow-md flex flex-col">
                                         <Link href={`/blogs/${post.slug}`} className="relative h-48">
-                                            <SafeImage src={post.featuredImage || "/placeholder.png"} alt={post.title} fill />
+                                            <SafeImage src={post.featuredImage || "/placeholder.png"} alt={post.title} fill sizes={'auto'} />
                                         </Link>
                                         <div className="p-6 flex flex-col flex-grow">
                                             <h2 className="text-xl font-bold mb-3 hover:text-blue-600">

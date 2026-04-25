@@ -118,7 +118,7 @@ export default function EnquiryModal({ submitAction }: EnquiryModalProps) {
                                     errorMessage={errors.insuranceType?.message as string}
                                 >
                                     {insuranceTypes.map((type) => (
-                                        <SelectItem key={type.value} value={type.value}>
+                                        <SelectItem key={type.value} >
                                             {type.label}
                                         </SelectItem>
                                     ))}

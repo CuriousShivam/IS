@@ -1,9 +1,7 @@
 import React from "react";
-import {   Button, Divider, Image } from "@heroui/react";
 import { HeartHandshake, ShieldCheck, UserCheck, Clock } from "lucide-react";
-import Link from "next/link";
 import {submitEnquiryAction} from "@/app/(overview)/action";
-import EnquiryModal from "@/components/enquirymodal";
+import EnquiryModal from "@/components/users/contactUs&enquiry/enquirymodal";
 
 // This is now a Server Component by default
 export default function AboutPage() {

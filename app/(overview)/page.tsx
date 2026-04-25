@@ -1,13 +1,12 @@
 'use client'
-import Carousel from "@/components/carousel";
-import QuickInsurance from "@/components/quickInsurance";
-import EnquiryModal from "@/components/enquirymodal";
+
+import EnquiryModal from "@/components/users/contactUs&enquiry/enquirymodal";
 import {submitEnquiryAction} from "@/app/(overview)/action";
 import {Button, Link} from "@heroui/react";
-import PartnerLogos from "@/components/partnerLogo";
-import WhyUs from "@/components/whyus";
-import GoodHands from "@/components/GoodHands";
-import ServicesSection from "@/components/serviceSection";
+import PartnerLogos from "@/components/users/home/partnerLogo";
+import WhyUs from "@/components/users/home/whyus";
+import GoodHands from "@/components/users/home/GoodHands";
+import ServicesSection from "@/components/users/home/serviceSection";
 
 // sm: process.env.NEXT_PUBLIC_CAROUSAL_SM.split(','); // small screens
 // md:  process.env.NEXT_PUBLIC_CAROUSAL_MD.split(','); // medium screens
@@ -37,9 +36,6 @@ export default function Home() {
                         </div>
                     </section>
 
-
-
-                    {/*</section>*/}
                     <ServicesSection/>
 
                     <WhyUs/>
@@ -69,5 +65,5 @@ export default function Home() {
 
             {/*<main className="flex  w-full flex-col p-1 pt-10"><QuickInsurance/></main>*/}
         </>
-)
+    )
 }

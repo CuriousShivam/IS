@@ -7,9 +7,7 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
-import Footer from "@/components/ui/footer";
-//
+ //
 // export const metadata: Metadata = {
 //   title: {
 //     default: siteConfig.name,

@@ -1,7 +1,7 @@
 // app/blogs/[id]/page.tsx - Next.js App Router
 import {Metadata} from 'next';
 import {notFound} from 'next/navigation';
-import SafeImage from "@/components/safeImage";
+import SafeImage from "@/components/admin/media/safeImage";
 import {getBlogBySlugAction} from "@/app/(overview)/blogs/action";
 
 interface BlogPost {

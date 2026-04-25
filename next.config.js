@@ -20,8 +20,7 @@ const nextConfig = {
         ],
     },
     reactStrictMode: true,
-    swcMinify: true,
 }
 
 // CHANGE THIS LINE:
-module.exports = nextConfig;
+export default nextConfig;

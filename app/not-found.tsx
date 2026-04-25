@@ -1,8 +1,8 @@
 // app/(overview)/not-found.tsx
 import Link from 'next/link';
 import {Search, Home, PhoneCall} from 'lucide-react';
-import {Navbar} from "@/components/navbar";
-import Footer from "@/components/ui/footer";
+import {Navbar} from "@/components/users/navbar&footer/navbar";
+import Footer from "@/components/users/navbar&footer/footer";
 
 export default function NotFound() {
     return (<>

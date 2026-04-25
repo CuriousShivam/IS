@@ -2,22 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import TiptapBlogEditor from "@/components/rte";
-import {createBlogAction, getBlogByIdAction, updateBlogAction} from "@/app/(admin)/admin/actions";
+import TiptapBlogEditor from "@/components/ui/rte";
+import { getBlogByIdAction, updateBlogAction} from "@/app/(admin)/admin/actions";
+import {BlogPost} from '@/types/blogPostType'
 
-interface BlogPost {
-    id?: string;
-    title: string;
-    slug: string;
-    content: string;
-    metaTitle: string;
-    metaDescription: string;
-    metaKeywords: string;
-    featuredImage: string;
-    status: 'draft' | 'published';
-    createdAt?: Date;
-    updatedAt?: Date;
-}
+
 
 export default function EditPostBySlug() {
     const { id } = useParams();
@@ -52,6 +41,7 @@ export default function EditPostBySlug() {
             return { success: true };
         } catch (error: any) {
             // console.error("Server Action Error:", error.message);
+            alert(error.message);
             return {
                 success: false,
                 message: error.response?.data || "Database connection failed"

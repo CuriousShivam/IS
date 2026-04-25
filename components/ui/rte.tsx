@@ -1,6 +1,3 @@
-// todo:
-// imediately change state on btn clicks
-// blockquote requires cite value for metadata
 'use client'
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {useEditor, EditorContent} from '@tiptap/react';
@@ -27,56 +24,32 @@ import {
     Redo,
     Link as LinkIcon,
     Unlink,
-    ImageIcon,
     AlignLeft,
     AlignCenter,
     AlignRight,
     Eye,
     Save,
-    Upload,
-    Video,
     Maximize2,
     Minimize2
 } from 'lucide-react';
 import { VideoEmbed } from '@/lib/TipTapExtension/VideoEmbed'
-import {getCategoriesAction, getImagesAction} from "@/app/(admin)/admin/actions";
-import {Select, SelectItem} from "@heroui/react";
-import {errors} from "jose";
-import {register} from "node:module";
+import { getImagesAction} from "@/app/(admin)/admin/actions";
 import CategorySelect from "@/app/(admin)/admin/category";
-import {useForm} from "react-hook-form";
-import AdminGallery from "@/components/AdminGallery";
-
+import AdminGallery from "@/components/admin/home/AdminGallery";
+import {BlogPost} from "@/types/blogPostType"
 const lowlight = createLowlight(common);
 
-interface BlogPost {
-    id?: string;
-    title: string;
-    slug: string;
-    content: string;
-    excerpt: string;
-    metaTitle: string;
-    metaDescription: string;
-    metaKeywords: string;
-    isFeatured:false;
-    featuredImage: string;
-    status: 'draft' | 'published';
-    category:string;
-    // createdAt?: Date;
-    // updatedAt?: Date;
-}
 
 interface TiptapBlogEditorProps {
     initialPost?: BlogPost;
-    onSave: (post: BlogPost) => Promise<void>;
+    onSave:any;
 }
 
 const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                                                                initialPost,
-                                                               onSave,
-                                                               // imageKitConfig
+                                                               onSave
                                                            }) => {
-    const [post, setPost] = useState<BlogPost>(
+    const [post, setPost] = useState(
         initialPost || {
             title: '',
             slug: '',
@@ -153,7 +126,6 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
                 .replace(/[^a-z0-9]+/g, '-')
                 .replace(/(^-|-$)/g, '');
             setPost(prev => ({ ...prev, slug }));
-
     }, [post.title]);
 
     // Auto-generate meta title if empty
@@ -194,13 +166,11 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
             if(!post.slug || post.slug.trim() === ''){
                 return window.alert("Slug is required.")
             }
+            console.log(post)
              await onSave({
                 ...post,
                 content: activeView === 'html' ? htmlContent : editor?.getHTML() || '',
-                // updatedAt: new Date(),
-                // createdAt: post.createdAt || new Date(),
-            });
-            // console.log('rte res ', res)
+               });
         } catch (error) {
             console.error('Save failed:', error);
             alert('Failed to save blogs post. Please try again.');
@@ -219,6 +189,7 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
 
     const handleCategoryChange = (id: string) => {
         // Updates the state with the selected ID from child
+        console.log("Handle change", id)
         setPost((prev: any) => ({ ...prev, category: id }));
     };
 
@@ -290,7 +261,7 @@ const TiptapBlogEditor: React.FC<TiptapBlogEditorProps> = ({
 
                 <CategorySelect
                     selectedId={post.category}
-                    onCategoryChange={handleCategoryChange}
+                    action={handleCategoryChange}
                 />
                  {/*Featured Image*/}
                 <div className="mb-4">

@@ -1,6 +1,6 @@
 'use client'; // Change this to 'use client'
 
-import RichTextEditor from "@/components/rte";
+import RichTextEditor from "@/components/ui/rte";
 import {createBlogAction, getCategoriesAction} from "@/app/(admin)/admin/actions";
 import axios from "axios";
 

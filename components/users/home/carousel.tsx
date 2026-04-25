@@ -11,20 +11,27 @@ import "swiper/css/navigation";
 
 export default function ResponsiveCarousel() {
     const [mounted, setMounted] = useState(false);
-    // Use state to hold the image arrays so they are stable
-    const [images, setImages] = useState({ sm: [], md: [], lg: [] });
+    const [images, setImages] = useState<{ sm: string[]; md: string[]; lg: string[] }>({
+        sm: [],
+        md: [],
+        lg: []
+    });
 
     useEffect(() => {
-        // Fetch and parse the ENV variables ONLY on the client
-        const smUrls = process.env.NEXT_PUBLIC_CAROUSAL_SM?.split(',').filter(Boolean) || ['/placeholder.png'];
-        const mdUrls = process.env.NEXT_PUBLIC_CAROUSAL_MD?.split(',').filter(Boolean) || ['/placeholder.png'];
-        const lgUrls = process.env.NEXT_PUBLIC_CAROUSAL_LG?.split(',').filter(Boolean) || ['/placeholder.png'];
+        // We do the parsing inside useEffect so it only happens on the client
+        const parseEnv = (key: string | undefined) =>
+            key?.split(',').filter(Boolean) || ['/placeholder.png'];
 
-        setImages({ sm: smUrls, md: mdUrls, lg: lgUrls });
+        setImages({
+            sm: parseEnv(process.env.NEXT_PUBLIC_CAROUSAL_SM),
+            md: parseEnv(process.env.NEXT_PUBLIC_CAROUSAL_MD),
+            lg: parseEnv(process.env.NEXT_PUBLIC_CAROUSAL_LG),
+        });
+
         setMounted(true);
     }, []);
 
-    // Skeleton loader for your i3 processor's speed
+
     if (!mounted) {
         return <div className="h-[75vh] w-full bg-gray-200 animate-pulse rounded-xl shadow-inner" />;
     }

@@ -1,6 +1,7 @@
 {
   "name": "next-app-template",
   "version": "0.0.1",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -82,8 +83,8 @@
     "@tiptap/pm": "^3.4.4",
     "@tiptap/react": "^3.4.4",
     "@tiptap/starter-kit": "^3.4.4",
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.2",
+    "axios": "^1.15.2",
+
     "clsx": "2.1.1",
     "framer-motion": "12.23.14",
     "highlight": "^0.2.4",
@@ -94,12 +95,12 @@
     "lodash.throttle": "^4.1.1",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.544.0",
-    "next": "latest",
+    "next": "15.1.0",
     "next-auth": "5.0.0-beta.29",
     "next-themes": "0.4.6",
-    "prisma": "^6.16.2",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-hook-form": "^7.63.0",
     "react-hot-toast": "^2.6.0",
     "react-hotkeys-hook": "^5.1.0",

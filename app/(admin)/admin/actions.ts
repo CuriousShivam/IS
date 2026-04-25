@@ -42,7 +42,8 @@ export async function getCategoriesAction() {
                 // Manually setting the Cookie header for the Server-to-Server call
                 'Content-Type': 'application/json',
                 // Manually set Origin if your Spring Boot CORS is strict
-                'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL
+                'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL,
+                'revalidate':360
             },
             withCredentials: true
         });
@@ -56,10 +57,7 @@ export async function getCategoriesAction() {
 export async function getBlogsAction() {
     try {
         const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:8080";
-console.log(
 
-
-    'getBlogsAction()');
         // Requirement 6.1.3: Retrieves blog content from PostgreSQL
         const res = await axios.get(`${baseUrl}/api/admin/blogs`, {
             headers: {
@@ -68,7 +66,8 @@ console.log(
                 // Manually set Origin if your Spring Boot CORS is strict
                 'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL
             },
-            withCredentials: true
+            withCredentials: true,
+
         });
 
         return {
@@ -100,7 +99,7 @@ export async function getBlogByIdAction(id: string) {
             },
             withCredentials: true
         });
-        console.log(res.data);
+
         return {
             success: true,
             data: res.data
@@ -226,7 +225,6 @@ export async function updateReviewStatus(id: string, updates: any) {
             },
             withCredentials: true
         });
-console.log(res.status);
         // Clear cache for the public reviews page so changes reflect immediately
         revalidatePath('/admin/reviews');
         return { success: true, data: res.data };
@@ -271,7 +269,6 @@ export async function getImagesAction() {
             credentials: 'include',
         });
         const data = await response.json();
-        console.log("Data",data)
         return { success: true, data: data };
     } catch (error:any) {
         console.error("Failed to fetch assets:", error);

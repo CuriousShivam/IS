@@ -1,56 +1,53 @@
 import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
+import {Metadata, Viewport} from "next";
 // import { Link } from "@heroui/link";
 import clsx from "clsx";
 
-import { Providers } from "../providers";
 
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
-import Footer from "@/components/ui/footer";
+import {siteConfig} from "@/config/site";
+import {fontSans} from "@/config/fonts";
+import {HeroUIProvider} from "@heroui/system";
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  icons: {
-    icon: "/favicon.ico",
-  },
+    title: {
+        default: siteConfig.name,
+        template: `%s - ${siteConfig.name}`,
+    },
+    description: siteConfig.description,
+    icons: {
+        icon: "/favicon.ico",
+    },
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" }
-  ],
+    themeColor: [
+        {media: "(prefers-color-scheme: light)", color: "white"}
+    ],
 };
 
 export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
+                                       children,
+                                   }: {
+    children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <head/>
-      <body
-        className={clsx(
-          "min-h-screen text-foreground bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
-      >
+    return (
+        <html lang="en">
+        <head/>
+        <body
+            className={clsx(
+                "min-h-screen text-foreground bg-background font-sans antialiased",
+                fontSans.variable,
+            )}
+        >
 
 
-      <div className="relative flex flex-col h-screen">
+        <HeroUIProvider>
+            <div className="relative flex flex-col h-screen">
+                {children}
+            </div>
+        </HeroUIProvider>
 
-              {children}
-
-
-          </div>
-
-      </body>
-    </html>
-  );
+        </body>
+        </html>
+    );
 }

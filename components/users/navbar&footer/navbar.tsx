@@ -15,7 +15,7 @@ import {
   Logo,
 } from "@/components/icons";
 import Image from "next/image";
-import ContactUsPage from '@/components/enquirymodal'
+import ContactUsPage from '@/components/users/contactUs&enquiry/enquirymodal'
 import {submitEnquiryAction} from "@/app/(overview)/action";
 
 export const Navbar = () => {
@@ -36,7 +36,7 @@ export const Navbar = () => {
           >
               <NavbarItem className="hidden md:flex gap-5">
                   <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
-                      <Image src={'/x.svg'} alt={'LinkedIn Logo'} width={30}  height={30} />
+                      <Image src={'/x.svg'} alt={'LinkedIn Logo'} width={30}  height={30}/>
                   </Link>
                   <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
                       <Image src={'/linkedin.svg'} alt={'LinkedIn Logo'} width={26}  height={23} />

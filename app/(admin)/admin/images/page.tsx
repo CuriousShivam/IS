@@ -3,8 +3,8 @@
 
 // Check this path: is it /admin/admin/ or just /admin/actions?
 import {getImagesAction, uploadImageAction} from '@/app/(admin)/admin/actions';
-import AdminImageUpload from '@/components/AdminImageUpload';
-import MediaGallery from "@/components/AdminGallery"; // Ensure this filename isn't a typo (Gallery vs Galary)
+import AdminImageUpload from '@/components/admin/media/AdminImageUpload';
+import MediaGallery from "@/components/admin/home/AdminGallery"; // Ensure this filename isn't a typo (Gallery vs Galary)
 
 export default function MediaManagementPage() { // Renamed from ImageUploadPage or MediaGallery
     return (

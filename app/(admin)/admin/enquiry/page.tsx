@@ -1,5 +1,5 @@
 import { getAdminEnquiries } from "../actions";
-import EnquiryTableClient from "@/components/EnquiryTableAdmin";
+import EnquiryTableClient from "@/components/admin/customerEnquiries/EnquiryTableAdmin";
 
 export default async function AdminEnquiryPage() {
     const enquiries = await getAdminEnquiries();

@@ -25,7 +25,6 @@ export default function AdminGallery({getImagesAction}:{getImagesAction:Function
         try {
             const data:any = await getImagesAction();
             setImages(data.data);
-            console.log(data);
         } catch (error) {
             console.error("Failed to fetch assets:", error);
         } finally {

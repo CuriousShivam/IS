@@ -120,7 +120,7 @@ export function useMenuNavigation<T>({
           return true
         }
 
-        case "Home": {
+        case "home": {
           event.preventDefault()
           setSelectedIndex(0)
           return true
