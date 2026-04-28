@@ -3,20 +3,8 @@ import {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import SafeImage from "@/components/admin/media/safeImage";
 import {getBlogBySlugAction} from "@/app/(overview)/blogs/action";
+import {BlogPost} from "@/types/blogPostType";
 
-interface BlogPost {
-    id: string;
-    title: string;
-    slug: string;
-    content: string;
-    metaTitle: string;
-    metaDescription: string;
-    metaKeywords: string;
-    featuredImage: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-}
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
     try {
@@ -26,9 +14,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
         if (!res || !res.success || !res.data) {
             return null;
         }
-        console.log("Created At",res.data.createdAt)
-
-        return res.data; // This is the actual BlogPost object
+                return res.data; // This is the actual BlogPost object
     } catch (error) {
         console.error('Failed to fetch blog post:', error);
         return null;
@@ -63,8 +49,7 @@ export async function generateMetadata(
             url: fullUrl,
             siteName: 'Insurance Advisor',
             type: 'article',
-            publishedTime: post.createdAt,
-            modifiedTime: post.updatedAt,
+
             images: [
                 {
                     url: post.featuredImage || '/default-share-image.jpg',
@@ -73,10 +58,6 @@ export async function generateMetadata(
                 },
             ],
         },
-
-        // Twitter Card
-
-
         // Canonical URL to prevent duplicate content issues
         alternates: {
             canonical: fullUrl,
@@ -87,7 +68,7 @@ export async function generateMetadata(
 export default async function BlogPostPage({
                                                params
                                            }: {
-    params: { slug: string }
+    params: Promise<{ slug: string }>
 }) {
     const p = await params;
     const post = await getBlogPost(p.slug);
@@ -97,13 +78,13 @@ export default async function BlogPostPage({
     }
 
     // Format date for display
-    const publishDate = new Date(post.createdAt).toLocaleDateString('en-US', {
+    const publishDate = new Date(post.createdAt || '').toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
     });
 
-    const updateDate = new Date(post.updatedAt).toLocaleDateString('en-US', {
+    const updateDate = new Date(post.updatedAt || '').toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

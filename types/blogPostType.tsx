@@ -11,6 +11,6 @@ export interface BlogPost {
     excerpt:string,
     isFeatured:boolean,
     category:'string',
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: string;
+    updatedAt?: string;
 }
