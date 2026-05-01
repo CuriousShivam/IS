@@ -24,9 +24,9 @@ export default function AboutPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-white  ">
+        <div className="min-h-screen bg-white  py-20 px-6">
             {/* --- Hero Section --- */}
-            <section className="py-20 bg-blue-50/30 -mt-26">
+            <section className="py-20 bg-blue-50/30 -mt-26 ">
                 <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div className="animate-in fade-in slide-in-from-left duration-1000">
                         <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-6">

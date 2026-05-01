@@ -33,8 +33,9 @@ export async function generateMetadata(
             description: 'The requested blog post could not be found.',
         };
     }
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:8080";
 
-    const fullUrl = `${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/blogs/${post.slug}`;
+    const fullUrl = `${baseUrl}/api/blogs/${post.slug}`;
 
     return {
         // Fallback to post.title if metaTitle is empty

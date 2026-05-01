@@ -8,7 +8,7 @@ import {revalidatePath} from "next/cache";
 // 1. Must be an async function
 export async function createBlogAction(post: any) {
     try {
-        const baseUrl = process.env.BACKEND_BASE_URL || "http://localhost:8080";
+        const baseUrl = process.env.NODE_ENV_BACKEND_BASE_URL || "http://localhost:8080";
 
 
         // 2. Await the backend call to ensure the promise resolves
@@ -19,7 +19,6 @@ export async function createBlogAction(post: any) {
                 'Origin': process.env.NODE_PUBLIC_FRONTEND_BASE_URL
             },
             withCredentials: true // Important for CORS
-
         });
 
         return { success: true, status: res.status };
@@ -34,7 +33,7 @@ export async function createBlogAction(post: any) {
 export async function getCategoriesAction() {
     try {
 
-        const baseUrl = process.env.BACKEND_BASE_URL || "http://localhost:8080";
+        const baseUrl = process.env.NODE_ENV_BACKEND_BASE_URL || "http://localhost:8080";
 
         // 2. Manually attach it to the backend call
         const res = await axios.get(`${baseUrl}/api/admin/categories`, {
@@ -56,7 +55,7 @@ export async function getCategoriesAction() {
 
 export async function getBlogsAction() {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:8080";
+        const baseUrl = process.env.NODE_ENV_BACKEND_BASE_URL || "http://localhost:8080";
 
         // Requirement 6.1.3: Retrieves blog content from PostgreSQL
         const res = await axios.get(`${baseUrl}/api/admin/blogs`, {
@@ -85,7 +84,7 @@ export async function getBlogsAction() {
 
 export async function getBlogByIdAction(id: string) {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:8080";
+        const baseUrl = process.env.NODE_ENV_BACKEND_BASE_URL || "http://localhost:8080";
 
         // Ensure the ID is valid before making the request
         if (!id) return { success: false, error: "ID is required" };
@@ -115,7 +114,7 @@ export async function getBlogByIdAction(id: string) {
 export async function updateBlogAction(post:any ) {
     try {
 
-        const baseUrl = process.env.BACKEND_BASE_URL || "http://localhost:8080";
+        const baseUrl = process.env.NODE_ENV_BACKEND_BASE_URL || "http://localhost:8080";
         post.category = post.category.id;
 
         // 2. Await the backend call to ensure the promise resolves
@@ -243,10 +242,7 @@ export async function uploadImageAction(formData: FormData) {
             body: formData, // FormData automatically sets the correct Multipart headers
             // Note: Do NOT manually set Content-Type header when sending FormData
             credentials: 'include',
-            headers: {
 
-
-            }
         });
 
 
