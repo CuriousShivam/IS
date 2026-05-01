@@ -1,12 +1,12 @@
 "use client"
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
     User, Chip, Switch, Tooltip
 } from "@heroui/react";
 import toast from "react-hot-toast";
 
-export default function ReviewTable({ initialReviews, updateAction }: any) {
+export default function ReviewTable({initialReviews, updateAction}: any) {
     const [reviews, setReviews] = useState(initialReviews);
 
     const handleToggle = async (id: string, field: string, currentValue: any) => {
@@ -14,10 +14,10 @@ export default function ReviewTable({ initialReviews, updateAction }: any) {
             ? (currentValue === 'approved' ? 'pending' : 'approved')
             : !currentValue;
 
-        const res = await updateAction(id, { [field]: newValue });
+        const res = await updateAction(id, {[field]: newValue});
 
         if (res.success) {
-            setReviews(reviews.map((r: any) => r.id === id ? { ...r, [field]: newValue } : r));
+            setReviews(reviews.map((r: any) => r.id === id ? {...r, [field]: newValue} : r));
             toast.success("Updated successfully");
         } else {
             toast.error("Update failed");
@@ -49,7 +49,7 @@ export default function ReviewTable({ initialReviews, updateAction }: any) {
                             <User
                                 name={rev.customerName}
                                 description={rev.customerEmail}
-                                avatarProps={{ size: "sm", src: `https://ui-avatars.com/api/?name=${rev.customerName}` }}
+                                avatarProps={{size: "sm", src: `https://ui-avatars.com/api/?name=${rev.customerName}`}}
                             />
                             <p className="text-[10px] text-gray-400 mt-1">{rev.phone}</p>
                         </TableCell>

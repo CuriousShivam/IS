@@ -1,5 +1,6 @@
 import { getAdminReviews, updateReviewStatus } from "@/app/(admin)/admin/actions";
 import ReviewTable from "./reviewTable";
+export const dynamic = 'force-dynamic';
 
 export default async function AdminReviewsPage() {
     const reviews = await getAdminReviews();
