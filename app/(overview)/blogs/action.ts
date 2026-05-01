@@ -11,7 +11,7 @@ import { cache } from 'react';
 // Use React 'cache' to memoize the function during a single render pass
 export const getBlogPostsAction = cache(async (): Promise<BlogPost[]> => {
     try {
-        const baseUrl = process.env.BASE_URL || "http://localhost:8080";
+        const baseUrl = process.env.NODE_ENV_BACKEND_BASE_URL || "http://localhost:8080";
 
         const res = await fetch(
             `${baseUrl}/api/blogs?status=published`,
