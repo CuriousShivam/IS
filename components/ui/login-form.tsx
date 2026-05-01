@@ -1,27 +1,28 @@
 'use client';
-
-import { Card, CardHeader, CardBody, Input, Button } from "@heroui/react";
+import { Card, CardHeader, CardBody, Input, Button, Progress } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import {useState} from "react";
 
 export default function LoginFormClient({ action }: { action: any }) {
     const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm();
-
+    const [submit,setSubmit] = useState(false);
     const handleForm = async (data: any) => {
-
+        setSubmit(true);
         const formData = new FormData();
         formData.append("email", data.email);
         formData.append("password", data.password);
 
         const result = await action(formData);
-        console.log( "Success: ", result.success);
+        //console.log( "Success: ", result.success);
         if (result?.success) {
             router.push("/admin");
         } else {
             alert(result?.message);
         }
     };
+    if (submit) return (<Progress aria-label="Loading..." className="max-w-md" value={60} />);
 
     return (
         <Card className="w-full max-w-[400px] shadow-xl">

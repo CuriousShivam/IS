@@ -1,34 +1,17 @@
 'use client'; // Change this to 'use client'
 
 import RichTextEditor from "@/components/ui/rte";
-import {createBlogAction, getCategoriesAction} from "@/app/(admin)/admin/actions";
-import axios from "axios";
+import {createBlogAction} from "@/app/(admin)/admin/actions";
+import {BlogPost} from "@/types/blogPostType";
 
-interface BlogPost {
-    id?: string;
-    title: string;
-    slug: string;
-    content: string;
-    excerpt: string;
-    metaTitle: string;
-    metaDescription: string;
-    metaKeywords: string;
-    isFeatured:false;
-    // featuredImage: string;
-    status: 'draft' | 'published';
-    category:string;
-    // createdAt?: Date;
-    // updatedAt?: Date;
-}
 
 export default function NewBlogPage() {
     const onSave = async (post: BlogPost) => {
 
         try {
-
-            // 2. Await the backend call to ensure the promise resolves
+            // Await the backend call to ensure the promise resolves
             const result = await createBlogAction(post);
-            return { success: true };
+            return result.success;
         } catch (error: any) {
             // console.error("Server Action Error:", error.message);
             return {

@@ -2,51 +2,7 @@
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, Search } from 'lucide-react';
 import SafeImage from "@/components/admin/media/safeImage";
-
-interface BlogPost {
-    id: string;
-    title: string;
-    slug: string;
-    metaTitle: string;
-    metaDescription: string;
-    metaKeywords: string;
-    featuredImage: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-}
-async function getBlogPosts(): Promise<BlogPost[]> {
-    try {
-        const baseUrl = process.env.BASE_URL || "http://localhost:8080";
-        const res = await fetch(
-            `${baseUrl}/api/blogs?status=published`,
-            {cache: 'no-store',
-                next: {
-                    revalidate:  0,
-                },
-            }
-        );
-
-
-        if (!res.ok) return [];
-
-        const data = await res.json();
-
-
-        // OPTIMIZATION: Map only the required fields for the UI
-        return data.map((post: any) => ({
-            id: post.id,
-            title: post.title,
-            slug: post.slug,
-            metaDescription: post.metaDescription || post.content?.substring(0, 160),
-            featuredImage: post.featuredImage,
-            createdAt: post.createdAt,
-        }));
-    } catch (error) {
-        console.error('Error fetching blogs posts:', error);
-        return [];
-    }
-}
+import {getBlogPostsAction} from "@/app/(overview)/blogs/action";
 
 // Helper function to calculate reading time
 function calculateReadingTime(content: string): number {
@@ -73,7 +29,7 @@ function getExcerpt(description: string, maxLength: number = 150): string {
 }
 
 export default async function BlogListPage() {
-    const posts = await getBlogPosts();
+    const posts = await getBlogPostsAction();
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL
     // Generate JSON-LD for blogs list
     const jsonLd = {

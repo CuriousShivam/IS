@@ -31,12 +31,12 @@ export async function getApprovedReviews() {
     try {
 
         const res = await fetch(`${baseUrl}/api/reviews`, {
-            next: { revalidate: 900 } // Cache for 1 hour to save CPU/RAM
+            next: { revalidate: 600 } // Cache for 10 min to save CPU/RAM
         });
 
         if (!res.ok) return [];
         const data = await res.json();
-        return data
+        return data;
     } catch (error) {
         console.error("Fetch Reviews Error:", error);
         return [];
